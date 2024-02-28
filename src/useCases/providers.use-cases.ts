@@ -1,8 +1,13 @@
 import { iProvider } from '../interfaces/Providers';
 import { Database } from '../classes/Database';
+import { BadRequestException, HttpStatus } from '@nestjs/common';
+// Abrimos conexión con la base de datos
+const database = new Database('db.json');
 
+/**
+ * Función que manda a traer todos los proveedores de la base de datos
+ */
 export const getAllProviders = async () => {
-  const database = new Database();
   try {
     const resp = database.readDatabase();
     return resp;
@@ -11,40 +16,54 @@ export const getAllProviders = async () => {
   }
 };
 
+/**
+ * Función que manda a guardar un proveedor de la base de datos
+ */
 export const writeProvider = async (jsonData: iProvider) => {
-  const database = new Database();
-  const providers = await database.readDatabase();
-  const provider = await database.getByName(jsonData.name);
-
+  // Busca el proveedor por nombre
+  const provider = database.getByName(jsonData.name);
+  //Si el proveedor existe regresa un error
   if (provider)
-    throw Error(
-      JSON.stringify({
-        status: 400,
-        message: 'Ya existe el proveedor',
-        ok: false,
-      }),
-    );
+    throw new BadRequestException({
+      status: HttpStatus.BAD_REQUEST,
+      message: 'Ya existe el proveedor',
+      ok: false,
+    });
+  // Obtiene los proveedores
+  const providers = await database.readDatabase();
+  // Añadimos el proveedor a la lista
   providers.push({ id: providers.length + 1, ...jsonData });
   try {
+    // Escribimos los proveedores en la base
     await database.writeDatabase(providers);
+    // Regresamos la respuesta
     return { ok: true, message: 'Proveedor creado con éxito' };
   } catch (error) {
     throw error;
   }
 };
+
+/**
+ * Función que manda a guardar muchos proveedores
+ */
 export const writeProviders = async (jsonData: iProvider[]) => {
-  const database = new Database();
   try {
+    // Mandamos a guardar todos los proveedores recibidos
     await database.writeDatabase(jsonData);
+    // Regresamos respuesta
     return { ok: true, message: 'Proveedores actualizados con éxito' };
   } catch (error) {
     throw error;
   }
 };
+
+/**
+ * Función que elimina un proveedor por ID
+ */
 export const deleteProviderById = async (id: number) => {
-  const database = new Database();
   try {
     try {
+      // Mandamos a eliminar el proveedor
       return database.deletedById(id);
     } catch (error) {}
     return { ok: true, message: 'Proveedores actualizados con éxito' };
