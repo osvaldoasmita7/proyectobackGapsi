@@ -2,6 +2,9 @@ import { BadRequestException, HttpStatus } from '@nestjs/common';
 import { readFile, writeFile } from 'fs/promises';
 import { iProvider } from 'src/interfaces';
 
+/**
+ * Patrón utilizado: Singleton
+ */
 export class Database {
   providers: iProvider[] = [];
   nameDB: string = '';

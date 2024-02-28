@@ -1,6 +1,6 @@
 ## Description
 
-Bienvenidos a mi proyecto backend
+Bienvenidos a mi proyecto backend realizado con NestJS y swagger. Se utilizaron los patrones MVC y SINGLETON
 
 ## Installation
 
@@ -21,6 +21,10 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
+# para ver la documentación con swagger es requerido correr el proyecto e ingresar al siguiente enlace
+
+http://localhost:3000/api
 
 ## Support
 

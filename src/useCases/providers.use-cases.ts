@@ -1,6 +1,10 @@
-import { iProvider } from '../interfaces/Providers';
 import { Database } from '../classes/Database';
 import { BadRequestException, HttpStatus } from '@nestjs/common';
+import { ProvidersDto } from 'src/providers/dto/providers.dto';
+/**
+ * Patrón utilizado: Singleton
+ * Se utilizó una instancia generica para la lectura de la base de datos
+ */
 // Abrimos conexión con la base de datos
 const database = new Database('db.json');
 
@@ -19,7 +23,7 @@ export const getAllProviders = async () => {
 /**
  * Función que manda a guardar un proveedor de la base de datos
  */
-export const writeProvider = async (jsonData: iProvider) => {
+export const writeProvider = async (jsonData: ProvidersDto) => {
   // Busca el proveedor por nombre
   const provider = database.getByName(jsonData.name);
   //Si el proveedor existe regresa un error
@@ -46,7 +50,7 @@ export const writeProvider = async (jsonData: iProvider) => {
 /**
  * Función que manda a guardar muchos proveedores
  */
-export const writeProviders = async (jsonData: iProvider[]) => {
+export const writeProviders = async (jsonData: ProvidersDto[]) => {
   try {
     // Mandamos a guardar todos los proveedores recibidos
     await database.writeDatabase(jsonData);

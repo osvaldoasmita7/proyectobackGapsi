@@ -17,6 +17,12 @@ import {
   statusResponse,
   versionResponse,
 } from '../responsesSwagger';
+/**
+ * Patrón utilizado: MVC
+ * El modelo se encuentra en ./dto/provider dto y su interfaz en interfaces
+ * El controlador es este mismo
+ * La vista se encuentra en react una vez ejecutada la petición
+ */
 
 @ApiTags('providers')
 @Controller('providers')
@@ -42,7 +48,6 @@ export class ProvidersController {
   /**
    * Endpoint que permite crear los proveedores validando que no existan
    */
-
   @Post('')
   @ApiResponse({
     status: 200,
